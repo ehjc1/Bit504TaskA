@@ -8,8 +8,7 @@ import java.awt.Graphics;
 
 
 public class GameMain extends JPanel implements MouseListener
-
-{	
+{
 	public static final int ROWS = 3;     									//Constants for game 
 	public static final int COLS = 3;  										// number of ROWS by COLS cell constants 
 	public static final String TITLE = "Tic Tac Toe";	
@@ -47,20 +46,18 @@ public class GameMain extends JPanel implements MouseListener
 		
 	}
 																							
-		public void createBoard() 												//TODO: call the method to initialise the game board
-		
-		{																		// TODO: Create a new instance of the game "Board"class.
-			board = new Board(); 												//HINT check the variables above for the correct name
-			board.paintBoard(g);
-			currentPlayer = Player.Cross;
-			currentState = GameState.Playing;
-		}
+	public void createBoard(Graphics g) 												//TODO: call the method to initialise the game board
+	{																		// TODO: Create a new instance of the game "Board"class.
+		super.paintComponent(g);
+		board = new Board(); 												//HINT check the variables above for the correct name
+		board.paintBoard(g);
+		currentPlayer = Player.Cross;
+		currentState = GameState.Playing;
+	}
 				
 	public static void main(String[] args) 
-	{
-																				// Run GUI code in Event Dispatch thread for thread safety.
-		javax.swing.SwingUtilities.invokeLater(new Runnable() 
-		
+	{			// Run GUI code in Event Dispatch thread for thread safety.
+		javax.swing.SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run() 			
 			{																	//create a main window to contain the panel
@@ -88,7 +85,7 @@ public class GameMain extends JPanel implements MouseListener
 		super.paintComponent(g);														//fill background and set colour to white
 		setBackground(Color.WHITE);	
 	//	board.paint(g);		
-	createBoard();
+		createBoard(g);
 		//ask the game board to paint itself		
 		if (currentState == GameState.Playing) 											//set status bar message		
 		{          
@@ -104,68 +101,75 @@ public class GameMain extends JPanel implements MouseListener
 				statusBar.setText("O's Turn!"); 										//TODO: use the status bar to display the message "O"'s Turn			
 			}  			
 		} 				
-			else if (currentState == GameState.Cross_won) 			
-			{          
-				statusBar.setForeground(Color.RED);          
-				statusBar.setText("'X' Won! Click to play again.");       			
-			} 
-		
-			else if (currentState == GameState.Nought_won) 		
-			{          
-				statusBar.setForeground(Color.RED);          
-				statusBar.setText("'O' Won! Click to play again.");       
-			}
-			else if (currentState == GameState.Draw) 			
-			{          
-				statusBar.setForeground(Color.RED);          
-				statusBar.setText("It's a Draw! Click to play again.");       
-			}
+		else if (currentState == GameState.Cross_won)
+		{
+			statusBar.setForeground(Color.RED);
+			statusBar.setText("'X' Won! Click to play again.");
+		}
+
+		else if (currentState == GameState.Nought_won)
+		{
+			statusBar.setForeground(Color.RED);
+			statusBar.setText("'O' Won! Click to play again.");
+		}
+		else if (currentState == GameState.Draw)
+		{
+			statusBar.setForeground(Color.RED);
+			statusBar.setText("It's a Draw! Click to play again.");
+		}
 	}	
 	
 	 
-		public void initGame()    															/** Initialise the game-board contents and the current status of GameState and Player) */
-		{
-			for (int row = 3; row < ROWS; ++row) {          
-				for (int col = 3; col < COLS; ++col) 
-				
-				{  
-				
-					board.cells[row][col].content = Player.Empty;           				// all cells empty
-				}
+	public void initGame()    															/** Initialise the game-board contents and the current status of GameState and Player) */
+	{
+		for (int row = 3; row < ROWS; ++row) {
+			for (int col = 3; col < COLS; ++col)
+			{
+
+				board.cells[row][col].content = Player.Empty;           				// all cells empty
 			}
-			 currentState = GameState.Playing;
-			 currentPlayer = Player.Cross;
 		}
+		 currentState = GameState.Playing;
+		 currentPlayer = Player.Cross;
+	}
 		
 		
-		/**After each turn check to see if the current player hasWon by putting their symbol in that position, 
-		 * If they have the GameState is set to won for that player
-		 * If no winner then isDraw is called to see if deadlock, if not GameState stays as PLAYING
-		 *   
-		 */
-		public void updateGame(Player thePlayer, int row, int col) 
+	/**After each turn check to see if the current player hasWon by putting their symbol in that position,
+	 * If they have the GameState is set to won for that player
+	 * If no winner then isDraw is called to see if deadlock, if not GameState stays as PLAYING
+	 *
+	 */
+	public void updateGame(Player thePlayer, int row, int col)
+	{
+		//check for win after play																// TODO: check which player has won and update the currentstate to the appropriate gamestate for the winner
+		if(board.hasWon(thePlayer, row, col)) 													// TODO: set the currentstate to the draw gamestate
 		{
-			//check for win after play																// TODO: check which player has won and update the currentstate to the appropriate gamestate for the winner
-			if(board.hasWon(thePlayer, row, col)) 													// TODO: set the currentstate to the draw gamestate
-			{if (thePlayer == Player.Cross)															//otherwise no change to current state of playing
-				currentState = GameState.Cross_won;	
+			if (thePlayer == Player.Cross)
+			{
+				//otherwise no change to current state of playing
+				currentState = GameState.Cross_won;
 			}
-			
-			else if(board.hasWon(thePlayer, row, col)) 
-			{if (thePlayer == Player.Nought)
+
+		}
+		else if(board.hasWon(thePlayer, row, col))
+		{
+			if (thePlayer == Player.Nought)
+			{
 				currentState = GameState.Nought_won;
 			}
-			
-			else if (board.isDraw(thePlayer, row, col)) 
-			{
-				currentState = GameState.Draw;
-			}
-				
-			else
-			{
-				currentState = GameState.Playing;
-			}
-		}				
+
+		}
+
+		else if (board.isDraw(thePlayer, row, col))
+		{
+			currentState = GameState.Draw;
+		}
+
+		else
+		{
+			currentState = GameState.Playing;
+		}
+	}
 	
 		/** Event handler for the mouse click on the JPanel. If selected cell is valid and Empty then current player is added to cell content.
 		 *  UpdateGame is called which will call the methods to check for winner or Draw. if none then GameState remains playing.
@@ -180,59 +184,51 @@ public class GameMain extends JPanel implements MouseListener
 		int rowSelected = mouseY / CELL_SIZE;             
 		int colSelected = mouseX / CELL_SIZE;        
 		
-		if (currentState == GameState.Playing) 
-			{                
-				if (rowSelected >= 0 && rowSelected < ROWS && colSelected >= 0 && colSelected < COLS && board.cells[rowSelected][colSelected].content == Player.Empty) 
-				{	
-					board.cells[rowSelected][colSelected].content = currentPlayer; 					// move  		                  
-					updateGame(currentPlayer, rowSelected, colSelected); 							// update currentState
-					
-				if (currentPlayer == Player.Cross) 													// Switch player
-				{
-					currentPlayer =  Player.Nought;
-				}
-				else 
-				{
-					currentPlayer = Player.Cross;
-				}  
+		if (currentState == GameState.Playing) {
+			if (rowSelected >= 0 && rowSelected < ROWS && colSelected >= 0 && colSelected < COLS && board.cells[rowSelected][colSelected].content == Player.Empty)
+			{
+				board.cells[rowSelected][colSelected].content = currentPlayer;                    // move
+				updateGame(currentPlayer, rowSelected, colSelected);                            // update currentState
 			}
+			if (currentPlayer == Player.Cross) 													// Switch player
+			{
+				currentPlayer =  Player.Nought;
+			}
+			else
+			{
+				currentPlayer = Player.Cross;
+			}
+		}
 		else 
-			{        		           
-			initGame();           																	// game over and restart    
-			}   
+		{
+			initGame();           																	// game over and restart
+		}
 	}
-		
 		//TODO: redraw the graphics on the UI          
-           
-	}
+
 		
 	
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
 		//  Auto-generated, event not used
-		
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) 
 	{
 		//  Auto-generated, event not used
-		
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) 
 	{
 		// Auto-generated,event not used
-		
 	}
 	@Override
 	public void mouseExited(MouseEvent e) 
 	{
 		// Auto-generated, event not used
-		
 	}
-
-	}
+}
 	
 	
 

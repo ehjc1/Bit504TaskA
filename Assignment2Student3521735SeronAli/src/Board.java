@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -13,17 +14,14 @@ public class Board {
 	
 	/** Constructor to create the game board */
 	public Board() {
-		cells = new Cell [GameMain.ROWS][GameMain.COLS];	
-			
+		cells = new Cell [GameMain.ROWS][GameMain.COLS];
 		
 		for (int row = 0; row < GameMain.ROWS; row++) {
 			for (int col = 0; col < GameMain.COLS; col++) {
 				cells[row][col] = new Cell(row, col);
 				
 			}
-
-	}
-	
+		}
 	}
 
 	 /** Return true if it is a draw (i.e., no more EMPTY cells) */ 
@@ -35,11 +33,11 @@ public class Board {
 		   
 		if(cells[playerRow][0].content != Value && cells[playerRow][1].content != Value 								// check if player has 3-in-that-row
 				&& cells[playerRow][2].content != Value )
-			return true; 
+			return true;
 		
 		if(cells[playerCol][0].content != Value && cells[playerCol][1].content != Value								// TODO: Check if the player has 3 in the playerCol.
-				&& cells[playerCol][2].content != Value )															 		// Hint: Use the row code above as a starting point, remember that it goes cells[row][column] 
-			return true; 		
+				&& cells[playerCol][2].content != Value )															 		// Hint: Use the row code above as a starting point, remember that it goes cells[row][column]
+			return true;
 		
 	
 		if( cells[0][0].content != Value && cells[1][1].content != Value && cells[2][2].content != Value)			 // 3-in-the-diagonal
@@ -52,7 +50,6 @@ public class Board {
 		
 		else 
 		{
-										
 			for (int row = 0; row < GameMain.ROWS; row++) {
 				for (int col = 0; col < GameMain.COLS; col++) {
 					if (cells[row][col].content == Player.Empty) {
@@ -61,10 +58,9 @@ public class Board {
 			
 				}
 			}
-			
-				{
-//				return GameState.Draw != null; 
-				}
+//				{
+////				return GameState.Draw != null;
+//				}
 		}
 		return false;
 	}
@@ -77,7 +73,7 @@ public class Board {
 			return true; 
 		
 		if(cells[playerCol][0].content == thePlayer && cells[playerCol][1].content == thePlayer 								// TODO: Check if the player has 3 in the playerCol.
-				&& cells[playerCol][2].content == thePlayer )															 		// Hint: Use the row code above as a starting point, remember that it goes cells[row][column] 
+				&& cells[playerCol][2].content == thePlayer)															 		// Hint: Use the row code above as a starting point, remember that it goes cells[row][column]
 			return true; 		
 		
 	
@@ -88,7 +84,6 @@ public class Board {
 		if( cells[2][2].content == thePlayer && cells[1][1].content == thePlayer && cells[0][0].content == thePlayer)			// TODO: Check the diagonal in the other direction
 			return true;
 
-		
 		else
 		{
 			return false;																										//no winner, keep playing
@@ -100,11 +95,9 @@ public class Board {
 	 * Draws the grid (rows then columns) using constant sizes, then call on the
 	 * Cells to paint themselves into the grid
 	 */
-	public void paintBoard(Graphics g) 																   //draw the grid
+	public void paintBoard(Graphics g)
 	{
-		
-
-		
+		// Draws board/grid
 		g.setColor(Color.gray);
 		for (int row = 0; row < GameMain.ROWS; ++row) 
 		{          
@@ -112,19 +105,16 @@ public class Board {
 					GameMain.CANVAS_WIDTH - 1, GRID_WIDTH,                
 					GRID_WIDTH, GRID_WIDTH);       
 		}
-		for (int col = 3; col < GameMain.COLS; ++col) 
-		
+		for (int col = 0; col < GameMain.COLS; ++col)
 		{          
 			g.fillRoundRect(GameMain.CELL_SIZE * col - GRID_WIDHT_HALF, 8,                
 					GRID_WIDTH, GameMain.CANVAS_HEIGHT - 1,                
 					GRID_WIDTH, GRID_WIDTH);
 		}
-		
 																							
-		for (int row = 0; row < GameMain.ROWS; ++row) 												//Draw the cells	
+		for (int row = 0; row < GameMain.ROWS; ++row) 	//Draw the cells
 		{          	
-			for (int col = 0; col < GameMain.COLS; ++col) 
-			
+			for (int col = 0; col < GameMain.COLS; ++col)
 			{  
 				cells[row][col].paint(g);
 			}
